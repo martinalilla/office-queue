@@ -1,3 +1,7 @@
+body{
+    background-color: #eeeeee;
+}
+
 .central_h1{
     text-align: center;
     padding-top: 5%;
@@ -7,10 +11,11 @@
 .central_p{
     text-align: center;
     padding-top: 2%;
-    padding-bottom: 2%;
+    padding-bottom: 1%;
+    font-size: x-large;
 }
 
-.large_button_container{
+.large_container{
     width: 50%;
     height: max-content;
     margin-left: 25%;
@@ -20,4 +25,13 @@
     margin-right: 2%;
     margin-left: 2%;
     height: 100%;
+    padding-bottom: 2%;
+}
+
+.ticket_badge{
+    margin-left: 20%;
+}
+
+#newTicket_container{
+    padding-bottom: 5%;
 }

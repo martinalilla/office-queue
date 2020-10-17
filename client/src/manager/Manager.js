@@ -46,7 +46,7 @@ class ManagerMain extends React.Component{
         return<>
             <h1 className="central_h1">Manager dashboard</h1>
             <p className="central_p">Here you can configure your office queue and see statistics about previous days</p>
-            <Container fluid={true} className="large_button_container">
+            <Container fluid={true} className="large_container">
                 <Row>
                     <Col>
                         <Button className="large_button" href="/manager/counterconfig" variant="success" size="lg" block>Configure your counters</Button>
