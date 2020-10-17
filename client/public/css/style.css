@@ -1,0 +1,23 @@
+.central_h1{
+    text-align: center;
+    padding-top: 5%;
+    padding-bottom: 2%;
+}
+
+.central_p{
+    text-align: center;
+    padding-top: 2%;
+    padding-bottom: 2%;
+}
+
+.large_button_container{
+    width: 50%;
+    height: max-content;
+    margin-left: 25%;
+}
+
+.large_button{
+    margin-right: 2%;
+    margin-left: 2%;
+    height: 100%;
+}
