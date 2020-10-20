@@ -156,3 +156,4 @@ app.put('/api/request_type/:tag_name', (req,res) => {
             }));
     }
 });
+module.exports= app;

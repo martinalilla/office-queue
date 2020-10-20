@@ -4,11 +4,7 @@
 // DAO module for accessing courses and exams
 // Data Access Object
 
-const sqlite = require('sqlite3');
-const moment = require('moment');
-const db = new sqlite.Database('office-queue.db', (err) => {
-  if (err) throw err;
-});
+const db = require('./db');
 
 const Request_type = require('./request_type');
 
