@@ -1,3 +1,4 @@
+
 const request = require('supertest');
 const chai = require('chai')
 const chaiHttp = require('chai-http');
@@ -8,7 +9,6 @@ const Request_type = require('../request_type');
 let should = chai.should();
 chai.use(chaiHttp);
 
-process.env.NODE_ENV = 'test';
 
 //TEST GET ALL REQUEST_TYPE
 describe('request_type_testing', ()=>{
@@ -20,7 +20,7 @@ describe('request_type_testing', ()=>{
               .end((err, res) => {
                     res.should.have.status(200);
                     res.body.should.be.a('array');
-                    res.body.length.should.be.eql(6);
+                    res.body.length.should.be.eql(5);
                 done();
               });
         });
@@ -52,7 +52,7 @@ describe('request_type_testing', ()=>{
   //POST /request_type
   //create a new request_type
   */
- /*describe('/POST request_type', () => {
+ describe('/POST request_type', () => {
     it('it should not POST a request_type without service_time', (done) => {
         let request = {
             tag_name : "new_request_type"
@@ -61,13 +61,48 @@ describe('request_type_testing', ()=>{
           .post('/api/request_type')
           .send(request)
           .end((err, res) => {
-                res.should.have.status(200);
-                res.body.should.be.a('object');
-                res.body.should.have.property('errors');
-                res.body.errors.should.have.property('service_time');
-                res.body.errors.service_time.should.have.property('kind').eql('required');
+                res.should.have.status(400);
             done();
           });
     });
+});
 
-});*/
+/*
+  * Test the /POST 
+  //POST /request_type
+  //create a new request_type
+  */
+ describe('/POST request_type', () => {
+  it('it should  POST a request_type with tag_name="testing"', (done) => {
+      let request = {
+          tag_name : "testing",
+          service_time: "00:00:00"
+      }
+    chai.request(app)
+        .post('/api/request_type')
+        .send(request)
+        .end((err, res) => {
+              res.should.have.status(201);
+              res.body.should.be.a('object');
+              res.body.should.have.property('id').eql(7);
+          done();
+        });
+  });
+});
+
+/*
+  * Test the /DELETE/request_type/:tag_name
+  */
+  describe('/DELETE/request_type/:tag_name', () => {
+      it('it should DELETE a request_type with tag name "testing" ', (done) => {
+                let tag_name = "testing";
+                chai.request(app)
+                .delete('/api/request_type/' + tag_name)
+                .end((err, res) => {
+                      res.should.have.status(204);
+                      res.body.should.be.a('object');
+                      //res.body.should.have.property('message').eql('Request_type deleted');
+                  done();
+                });
+      });
+  });

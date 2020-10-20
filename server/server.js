@@ -122,7 +122,7 @@ app.get('/api/request_type/:tag_name', (req, res) => {
   //create a new request_type
 app.post('/api/request_type', (req,res) => {
     const request_type = req.body;
-    if(!request_type){
+    if(!request_type || !request_type.tag_name || !request_type.service_time){
         res.status(400).end();
     } else {
         request_type_dao.create_request_type(request_type)
@@ -136,7 +136,7 @@ app.post('/api/request_type', (req,res) => {
 //DELETE /request_type/<tag_name>
 app.delete('/api/request_type/:tag_name', (req,res) => {
     request_type_dao.delete_request_type(req.params.tag_name)
-        .then((result) => res.status(204).end())
+        .then((result) => res.status(204).json({'message': 'Request_type deleted'}))
         .catch((err) => res.status(500).json({
             errors: [{'param': 'Server', 'msg': err}],
         }));
@@ -150,6 +150,21 @@ app.put('/api/request_type/:tag_name', (req,res) => {
     } else {
         const service_time = req.body.service_time;
         request_type_dao.update_request_type(req.params.tag_name,service_time)
+            .then((result) => res.status(200).end())
+            .catch((err) => res.status(500).json({
+                errors: [{'param': 'Server', 'msg': err}],
+            }));
+    }
+});
+
+//PUT /change/request_type/<tag_name>
+//Change the tag_name of an existing request_type with a given tag_name.
+app.put('/api/request_type/change/:tag_name', (req,res) => {
+    if(!req.body.tag_name){
+        res.status(400).end();
+    } else {
+        const new_tag_name = req.body.tag_name;
+        request_type_dao.change_tag_name(req.params.tag_name, new_tag_name)
             .then((result) => res.status(200).end())
             .catch((err) => res.status(500).json({
                 errors: [{'param': 'Server', 'msg': err}],
