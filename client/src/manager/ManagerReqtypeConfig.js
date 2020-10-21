@@ -34,11 +34,15 @@ class ManagerReqtypeConfig extends React.Component {
         // In case the server do not delete the request type, rollback the state
         api.deleteRequestType(reqTypeId).then(response => {
             // TODO: refactor
-            if(false) {
-                this.setState({
-                    requestTypeList: currentRequestTypes
-                })
-            }
+            // if(response) {
+                // this.setState({
+                //     requestTypeList: currentRequestTypes
+                // })
+            // }
+
+            api.getAllRequestTypes().then((reqTypeList) => {
+                this.setState({ requestTypeList: reqTypeList });
+            })
         })
     }
 
@@ -73,28 +77,28 @@ class ManagerReqtypeConfig extends React.Component {
     submitForm = (reqTypeId, tagName, serviceTime, isNew) => {
         // New Request Type
         if(isNew) {
-            var reqType = {reqTypeName: tagName, serviceTime: serviceTime}
+            var reqType = {tag_name: tagName, service_time: serviceTime}
 
             api.newRequestType(reqType).then(response => {
                 // TODO: refactor
-                if(true) {
+                // if(true) {
                     api.getAllRequestTypes().then((reqTypeList) => {
                         this.setState({ requestTypeList: reqTypeList });
                     })
-                }
+                // }
             })
         
         // Update Request Type
         } else {
-            reqType = {reqTypeId: reqTypeId, reqTypeName: tagName, serviceTime: serviceTime}
+            reqType = {reqTypeId: reqTypeId, tag_name: tagName, service_time: serviceTime}
 
             api.updateRequestType(reqType).then(response => {
                 // TODO: refactor
-                if(true) {
+                // if(true) {
                     api.getAllRequestTypes().then((reqTypeList) => {
                         this.setState({ requestTypeList: reqTypeList });
                     })
-                }
+                // }
             })
         }
     }
@@ -109,8 +113,8 @@ class ManagerReqtypeConfig extends React.Component {
                         <ul className="list-group mb-3">
                             {
                                 this.state.requestTypeList.map((requestType) =>
-                                    <RequestType key={requestType.reqTypeId} reqTypeId={requestType.reqTypeId} tagName={requestType.reqTypeName}
-                                        serviceTime={requestType.serviceTime} deleteRequestType={this.deleteRequestType} editRequestType={this.loadEditForm} />
+                                    <RequestType key={requestType.tag_name} reqTypeId={requestType.tag_name} tagName={requestType.tag_name}
+                                        serviceTime={requestType.service_time} deleteRequestType={this.deleteRequestType} editRequestType={this.loadEditForm} />
                                 )
                             }
                         </ul>
