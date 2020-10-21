@@ -1,10 +1,20 @@
 const express = require('express');
 const morgan = require('morgan');
+const bodyParser = require("body-parser");
 const counter_dao = require('./counter_dao.js');
+const ticket_dao = require('./ticket_dao.js');
 const request_type_dao = require('./request_type_dao.js')
+
+
 
 const PORT = 3001;
 app = new express();
+
+
+//Here we are configuring express to use body-parser as middle-ware.
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+
 // Logger
 app.use(morgan('tiny'));
 app.use(express.json());
@@ -21,7 +31,7 @@ app.get('/', (req, res) => {
 
 // REST API endpoints
 
-// Resources: Counters, Request_type
+// Resources: Counters, TICKETS, Request_type
 
 // GET /counters
 // Request body: empty
@@ -90,6 +100,53 @@ app.delete('/api/counter/:id/:request', (req,res) => {
         }));
 });
 
+  /***********************TICKETS******************************************/
+// GET LIST OF TICKETS 
+  app.get('/api/tickets', (req, res) => {
+    ticket_dao.listTickets()
+      .then((tickets) => res.json(tickets) )
+      .catch((err) => {
+        res.status(500).json({
+            errors: [{'param': 'Server', 'msg': err}],
+        });
+    });
+      
+  });
+
+//CREATE A NEW TICKET 
+  app.post('/api/tickets', (req,res) => {
+    const ticket = req.body;
+    console.log(req.body) ; 
+    if(!ticket || !ticket.request_type){
+        res.status(400).end();
+    } else {
+        ticket_dao.create_ticket(ticket.request_type)
+            .then((id) => res.status(201).json({"id" : id}))
+            .catch((err) => {
+                res.status(500).json({errors: [{'param': 'Server', 'msg': err}],})
+            });
+    }
+});
+
+
+  //Get tikets  by request_type
+  app.get('/api/tickets/:request_type', (req, res) => {
+    ticket_dao.get_tickets(req.params.request_type)
+        .then((tickets) => {
+            if(!tickets){
+                res.status(404).send();
+            } else {
+                res.json(tickets);
+            }
+        })
+        .catch((err) => {
+            res.status(500).json({
+                errors: [{'param': 'Server', 'msg': err}],
+            });
+        });
+});
+
+  /*********************************************************************** */
   // GET /request type
 // Request body: empty
 // Response body: Array of objects, each describing a Request_type
@@ -171,4 +228,6 @@ app.put('/api/request_type/change/:tag_name', (req,res) => {
             }));
     }
 });
+
+
 module.exports= app;
