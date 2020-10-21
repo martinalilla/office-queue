@@ -145,7 +145,7 @@ class ManagerCounterConfig extends React.Component {
                                 this.state.countersList &&
                                 this.state.countersList.map((c)=>{
                                     return <>
-                                        <li className={this.state.selectedCounter === c ? "list-group-item cursor-h selected" : "list-group-item cursor-h"}
+                                        <li key={this.state.selectedCounter} className={this.state.selectedCounter === c ? "list-group-item cursor-h selected" : "list-group-item cursor-h"}
                                             onClick={()=>{
                                                             this.getRequestTypes(c); 
                                                             this.setState({selectedCounter: c, mode: 'modify'});
@@ -195,7 +195,7 @@ function CreateCounter (props) {
                         {
                             props.allRequestTypes && 
                             props.allRequestTypes.map(r => {
-                                return <option>{r.tag_name + ' - ' + r.service_time}</option>
+                                return <option key={r.tag_name}>{r.tag_name + ' - ' + r.service_time}</option>
                             })
                         }
                     </FormControl>      
@@ -216,7 +216,7 @@ function ModifyCounter (props) {
                 props.requestTypes &&
                 props.requestTypes.map((r)=>{
                     return <>
-                        <li >{r.request_type}</li>
+                        <li key={r.request_type}>{r.request_type}</li>
                     </>
                 })
             }
