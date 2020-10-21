@@ -18,3 +18,6 @@ execute on command line 'npm start'. The pages will be available on
 ### in directory "server"
 execute on command line 'node server.js'.  
 APIs will be available on localhost:3001
+
+### for testing 
+execute on command line (directory server) 'npm test'
