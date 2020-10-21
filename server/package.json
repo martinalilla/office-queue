@@ -21,8 +21,8 @@
     "supertest": "^5.0.0"
   },
   "scripts": {
-    "test": "set NODE_ENV='test' && nodemon mocha */**.test.js",
-    "start": "set NODE_ENV='development' && node server.js"
+    "test": "set NODE_ENV='test' & nodemon mocha */**.test.js",
+    "start": "set NODE_ENV='development' & node server.js"
   },
   "author": "",
   "license": "ISC"

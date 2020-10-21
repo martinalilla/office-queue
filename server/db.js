@@ -1,16 +1,15 @@
 'use strict';
 
 const sqlite = require('sqlite3').verbose();
-//ar env = process.env.NODE_ENV;
 
-if(process.env.NODE_ENV.localeCompare('test')){
+
+if(process.env.NODE_ENV == 'test'){
+  
     var DBSOURCE = "./test/office-queue-test.db";
     
 }
-    
 else{
-    var DBSOURCE = "./office-queue.db";
-     
+    var DBSOURCE = "./office-queue.db";     
 }
    
 
