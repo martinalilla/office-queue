@@ -59,7 +59,7 @@ app.get('/api/counter/:id', (req, res) => {
   //INSERT A COUNTER (NEW OR AN EXISTING ONE WITH A NEW REQUEST_TYPE)
 app.post('/api/counter', (req,res) => {
     const counter = req.body;
-    if(!counter){
+    if(!counter || !counter.id){
         res.status(400).end();
     } else {
         counter_dao.create_counter(counter)
@@ -74,7 +74,7 @@ app.post('/api/counter', (req,res) => {
 //delete all the entries of a counter with a specific id 
 app.delete('/api/counter/:id', (req,res) => {
     counter_dao.delete_counter(req.params.id)
-        .then((result) => res.status(204).end())
+        .then((result) => res.status(204).json({'message': 'counter deleted'}))
         .catch((err) => res.status(500).json({
             errors: [{'param': 'Server', 'msg': err}],
         }));
@@ -84,7 +84,7 @@ app.delete('/api/counter/:id', (req,res) => {
 // Delete a specific request_type for a counter with a given id
 app.delete('/api/counter/:id/:request', (req,res) => {
     counter_dao.delete_request_type(req.params.id, req.params.request)
-        .then((result) => res.status(204).end())
+        .then((result) => res.status(204).json({'message': 'counter deleted'}))
         .catch((err) => res.status(500).json({
             errors: [{'param': 'Server', 'msg': err}],
         }));
