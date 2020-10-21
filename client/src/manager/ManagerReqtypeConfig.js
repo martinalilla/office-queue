@@ -74,31 +74,26 @@ class ManagerReqtypeConfig extends React.Component {
         })
     }
 
-    submitForm = (reqTypeId, tagName, serviceTime, isNew) => {
+    submitForm = (reqTypeId, prevTagName, tagName, serviceTime, isNew) => {
         // New Request Type
         if(isNew) {
             var reqType = {tag_name: tagName, service_time: serviceTime}
 
             api.newRequestType(reqType).then(response => {
-                // TODO: refactor
-                // if(true) {
-                    api.getAllRequestTypes().then((reqTypeList) => {
-                        this.setState({ requestTypeList: reqTypeList });
-                    })
-                // }
+                api.getAllRequestTypes().then((reqTypeList) => {
+                    this.setState({ requestTypeList: reqTypeList });
+                })
             })
         
         // Update Request Type
         } else {
             reqType = {reqTypeId: reqTypeId, tag_name: tagName, service_time: serviceTime}
-
-            api.updateRequestType(reqType).then(response => {
-                // TODO: refactor
-                // if(true) {
+            api.updateServiceTime(prevTagName, serviceTime).then(response => {
+                api.updateTagName(prevTagName, tagName).then(() => {
                     api.getAllRequestTypes().then((reqTypeList) => {
                         this.setState({ requestTypeList: reqTypeList });
                     })
-                // }
+                })
             })
         }
     }
@@ -202,13 +197,13 @@ class RequestTypeForm extends React.Component {
                 </Form.Group>
                 <Form.Group controlId="formServiceTime">
                     <Form.Label>Service Time</Form.Label>
-                    <Form.Control type="number" placeholder="Enter the service time" min="1" onChange={this.updateServiceTime} value={this.state.serviceTime}/>
+                    <Form.Control type="number" placeholder="Enter the service time" min="1" onChange={this.updateServiceTime}/>
                     <Form.Text className="text-muted">
                         The service time is an estimation of the average time needed to process this request type.
                     </Form.Text>
                 </Form.Group>
                 <Col className="text-center">
-                    <Button variant="success" size="lg" onClick={() => this.props.submitForm(this.state.reqTypeId, this.state.tagName, this.state.serviceTime, this.props.selectedRequestType.isNew)}>Submit</Button>
+                    <Button variant="success" size="lg" onClick={() => this.props.submitForm(this.state.reqTypeId, this.props.selectedRequestType.tagName, this.state.tagName, this.state.serviceTime, this.props.selectedRequestType.isNew)}>Submit</Button>
                 </Col>
             </Form>
         );

@@ -1,6 +1,6 @@
 import React from 'react';
 import api from "../api";
-import { Container, Row, Col, Button, Form, InputGroup, FormControl, FormLabel } from 'react-bootstrap';
+import { Container, Row, Col, Button } from 'react-bootstrap';
 
 class Counter extends React.Component {
     constructor(props){
@@ -43,12 +43,10 @@ class Counter extends React.Component {
                             {
                                 this.state.countersList &&
                                 this.state.countersList.map((c)=>{
-                                    return <>
-                                        <li className={this.state.selectedCounter === c ? "list-group-item cursor-h selected" : "list-group-item cursor-h"}
-                                            onClick={()=>{this.setState({selectedCounter: c});}}>
-                                            <h5 className="mb-1">Counter: {c}</h5>
-                                        </li>
-                                    </>
+                                    return <li key={c} className={this.state.selectedCounter === c ? "list-group-item cursor-h selected" : "list-group-item cursor-h"}
+                                                onClick={()=>{this.setState({selectedCounter: c});}} >
+                                                <h5 className="mb-1">Counter: {c}</h5>
+                                            </li>
                                 })
                             }
                         </ul>

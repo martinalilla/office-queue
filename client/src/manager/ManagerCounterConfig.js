@@ -56,9 +56,12 @@ class ManagerCounterConfig extends React.Component {
             this.setState({allRequestTypes: list});
             //filter result for a list which counter doesn't serve
             let arr=[];
-            arr = list.filter((req) => {
-                        const c = this.state.requestTypes.find((a)=>{return (req.tag_name === a.request_type)})
-                        if(!c) return req;
+            list.forEach((req) => {
+                        if(this.state.requestTypes !== undefined){
+                            const c = this.state.requestTypes.find((a)=>{return (req.tag_name === a.request_type)})
+                            if(!c) arr.push(req);
+                        }
+                        
                     });
             this.setState({unassignedReqTypes: arr});
 
@@ -123,12 +126,14 @@ class ManagerCounterConfig extends React.Component {
             case 'delC': 
                     api.deleteCounter(this.state.selectedCounter)
                     .then((ok) => {
+                        this.setState({mode: 'new'});
                         this.getCountersList();
             
                     }).catch((err) => {
                         console.log('Database error', err);
                     });
                 break;
+                default: console.log('nothing to do');
         }
     }
 
@@ -144,15 +149,13 @@ class ManagerCounterConfig extends React.Component {
                             {
                                 this.state.countersList &&
                                 this.state.countersList.map((c)=>{
-                                    return <>
-                                        <li className={this.state.selectedCounter === c ? "list-group-item cursor-h selected" : "list-group-item cursor-h"}
-                                            onClick={()=>{
-                                                            this.getRequestTypes(c); 
-                                                            this.setState({selectedCounter: c, mode: 'modify'});
-                                                            }}>
-                                            <h5 className="mb-1">Counter: {c}</h5>
-                                        </li>
-                                    </>
+                                    return <li key={c} className={this.state.selectedCounter === c ? "list-group-item cursor-h selected" : "list-group-item cursor-h"}
+                                                onClick={()=>{
+                                                                this.getRequestTypes(c); 
+                                                                this.setState({selectedCounter: c, mode: 'modify'});
+                                                                }}>
+                                                <h5 className="mb-1">Counter: {c}</h5>
+                                            </li>
                                 })
                             }
                         </ul>
@@ -168,7 +171,7 @@ class ManagerCounterConfig extends React.Component {
 
                         { 
                             this.state.mode === 'modify' &&
-                            <ModifyCounter requestTypes={this.state.requestTypes} onInputChange={this.onInputChange} unassignedReqTypes={this.state.unassignedReqTypes} handleSubmit={this.handleSubmit} onInputChange={this.onInputChange} input={this.state.input}/>
+                            <ModifyCounter requestTypes={this.state.requestTypes} onInputChange={this.onInputChange} unassignedReqTypes={this.state.unassignedReqTypes} handleSubmit={this.handleSubmit}  input={this.state.input}/>
                         }
                     </Col>
                 </Row>
@@ -191,11 +194,11 @@ function CreateCounter (props) {
                 <Form.Group >
                     <FormLabel>Request type</FormLabel> 
                     <FormControl as="select" name="req" onChange={e=>props.onInputChange(e)}>
-                        <option>Choose</option>
+                        <option >Choose</option>
                         {
                             props.allRequestTypes && 
                             props.allRequestTypes.map(r => {
-                                return <option>{r.tag_name + ' - ' + r.service_time}</option>
+                                return <option key={r.tag_name}>{r.tag_name + ' - ' + r.service_time}</option>
                             })
                         }
                     </FormControl>      
@@ -215,9 +218,7 @@ function ModifyCounter (props) {
             {
                 props.requestTypes &&
                 props.requestTypes.map((r)=>{
-                    return <>
-                        <li >{r.request_type}</li>
-                    </>
+                    return <li key={r.request_type}>{r.request_type}</li>
                 })
             }
         </ul>
@@ -234,7 +235,7 @@ function ModifyCounter (props) {
                             {
                                 props.unassignedReqTypes && 
                                 props.unassignedReqTypes.map(r => {
-                                    return <option>{r.tag_name}</option>
+                                    return <option key={r.tag_name}>{r.tag_name}</option>
                                 })
                             }
                         </FormControl>
@@ -249,7 +250,7 @@ function ModifyCounter (props) {
                             {
                                 props.requestTypes && 
                                 props.requestTypes.map(r => {
-                                    return <option>{r.request_type}</option>
+                                    return <option key={r.request_type}>{r.request_type}</option>
                                 })
                             }
                         </FormControl>
