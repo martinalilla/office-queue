@@ -217,6 +217,31 @@ async function updateServiceTime(tag_name, service_time) {
     });
 }
 
+async function updateTagName(tag_name, new_tag_name) {
+
+    // PUT new tag name for a given request type
+    // Request header : /current_tag_name
+    // Request body : /new_tag_name
+    // Response body: message about success
+    return new Promise((resolve, reject) => {
+        fetch('/api/request_type/change/' + tag_name, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({tag_name: new_tag_name}),
+        }).then((response) => {
+            if (response.ok) {
+                    resolve(true);
+
+            } else {
+                reject({status: response.status, msg: "Database error..."})
+            }
+        }).catch((err) => { reject({status: err.status, msg: "Server error..."}) }); // connection errors
+    });
+}
+
+
 // TEMPORARY function 
 async function getTicket(requestType){
     // Temporary function to test frontend
@@ -227,4 +252,4 @@ async function getTicket(requestType){
 
 export default{getAllRequestTypes, getAllCountersList, getRequestTypes, getCountersByRequestType, newCounter,
                 deleteCounter, deleteRequestTypeFromCounter, getServiceTime, newRequestType, deleteRequestType,
-                updateServiceTime, getTicket};
+                updateServiceTime, updateTagName, getTicket};
