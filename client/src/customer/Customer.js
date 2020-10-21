@@ -36,7 +36,7 @@ class Customer extends React.Component {
             this.setState((state)=>{
                let newTicketList = [...state.ticketList] ;
 
-               newTicketList.push({ticketNum: ticketId, reqTypeId: reqTypeName});
+               newTicketList.push({ticketNum: ticketId, reqTypeName: reqTypeName});
 
                 return {ticketList: newTicketList};
             })
@@ -51,7 +51,7 @@ class Customer extends React.Component {
             <div>
                 {
                     this.state.ticketList.map((e)=>
-                        <Ticket key={e} ticketNum={e.ticketNum} reqTypeId={e.reqTypeId} reqTypeName={this.state.requestTypeArray[e.reqTypeId]}/>
+                        <Ticket key={e} ticketNum={e.ticketNum} reqTypeName={e.reqTypeName} />
                     )
                 }
             </div>

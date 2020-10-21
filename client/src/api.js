@@ -247,7 +247,21 @@ async function getTicket(requestType){
     // Temporary function to test frontend
     // EXPECTED INPUT: integer that corresponds to the index of the request type
     // EXPECTED OUTPUT: integer that corresponds to the number of the ticket generated
-    return Math.floor(Math.random() * 100) + 1;
+    const response = await fetch('/api/tickets', {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({request_type: requestType}),
+    });
+    const result = await response.json();
+    if(response.ok){
+        return result.id;
+
+    } else{
+        let error = {status: response.status, msg: "Cann't fetch counters list."};
+        throw error;
+    }
 }
 
 export default{getAllRequestTypes, getAllCountersList, getRequestTypes, getCountersByRequestType, newCounter,
