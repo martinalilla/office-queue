@@ -6,7 +6,7 @@ async function getAllCountersList() {
     // Response body: array of objects, each describing a Counter
     const response = await fetch('/counters');
     const result = await response.json();
-    if(response.ok){        
+    if(response.ok){       
         return result;
 
     } else{ 
@@ -63,7 +63,7 @@ async function newCounter(counter) {
             body: JSON.stringify(counter),
         }).then((response) => {
             if (response.ok) {
-                    resolve(response);
+                    resolve(response.json());
 
             } else {
                 reject({status: response.status, msg: "Database error..."})
@@ -124,7 +124,7 @@ async function getAllRequestTypes() {
     // Response body: array of objects
     const response = await fetch('/request_type');
     const result = await response.json();
-    if(response.ok){        
+    if(response.ok){       
         return result;
 
     } else{ 

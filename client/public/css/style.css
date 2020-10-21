@@ -35,3 +35,12 @@ body{
 #newTicket_container{
     padding-bottom: 5%;
 }
+
+.cursor-h:hover {
+    cursor: pointer;
+    background-color: #28a745;
+}
+
+.selected {
+    background-color: #28a745;
+}
