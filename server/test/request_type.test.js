@@ -106,3 +106,83 @@ describe('request_type_testing', ()=>{
                 });
       });
   });
+
+  /*
+  * Test the /PUT/
+  //PUT /request_type/<tag_name>
+//Update the service time of an existing request_type with a given tag_name.
+  */
+ describe('/PUT/request_type/:tag_name', () => {
+  it('it should UPDATE the service time given the tag name', (done) => {
+            let tag_name = "shipping"
+            chai.request(app)
+            .put('/api/request_type/' + tag_name)
+            .send({service_time : "00:11:00"})
+            .end((err, res) => {
+                  res.should.have.status(200);
+                  res.body.should.be.a('object');
+                  res.body.should.have.property('message').eql('Service_time updated');
+              done();
+            });
+  });
+});
+
+ /*
+  * Test the /PUT/
+  //PUT /request_type/<tag_name>
+//Update the service time of an existing request_type with a given tag_name.
+  */
+ describe('/PUT/request_type/:tag_name', () => {
+  it('it should UPDATE the service time given the tag name', (done) => {
+            let tag_name = "shipping"
+            chai.request(app)
+            .put('/api/request_type/' + tag_name)
+            .send({service_time : "00:10:00"})
+            .end((err, res) => {
+                  res.should.have.status(200);
+                  res.body.should.be.a('object');
+                  res.body.should.have.property('message').eql('Service_time updated');
+              done();
+            });
+  });
+});
+
+ /*
+  * Test the /PUT/
+  //PUT /change/request_type/<tag_name>
+//Change the tag_name of an existing request_type with a given tag_name.
+  */
+ describe('/PUT/request_type/change/:tag_name', () => {
+  it('it should CHANGE the tag_name of a given request_type', (done) => {
+            let tag_name = "shipping"
+            chai.request(app)
+            .put('/api/request_type/change/' + tag_name)
+            .send({tag_name : "test"})
+            .end((err, res) => {
+                  res.should.have.status(200);
+                  res.body.should.be.a('object');
+                  res.body.should.have.property('message').eql('Tag_name changed');
+              done();
+            });
+  });
+});
+
+/*
+  * Test the /PUT/
+  //PUT /change/request_type/<tag_name>
+//Change the tag_name of an existing request_type with a given tag_name.
+  */
+ describe('/PUT/request_type/change/:tag_name', () => {
+  it('it should CHANGE the tag_name of a given request_type', (done) => {
+            let tag_name = "test"
+            chai.request(app)
+            .put('/api/request_type/change/' + tag_name)
+            .send({tag_name : "shipping"})
+            .end((err, res) => {
+                  res.should.have.status(200);
+                  res.body.should.be.a('object');
+                  res.body.should.have.property('message').eql('Tag_name changed');
+              done();
+            });
+  });
+});

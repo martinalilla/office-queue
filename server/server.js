@@ -150,7 +150,7 @@ app.put('/api/request_type/:tag_name', (req,res) => {
     } else {
         const service_time = req.body.service_time;
         request_type_dao.update_request_type(req.params.tag_name,service_time)
-            .then((result) => res.status(200).end())
+            .then((result) => res.status(200).json({'message': 'Service_time updated'}))
             .catch((err) => res.status(500).json({
                 errors: [{'param': 'Server', 'msg': err}],
             }));
@@ -165,7 +165,7 @@ app.put('/api/request_type/change/:tag_name', (req,res) => {
     } else {
         const new_tag_name = req.body.tag_name;
         request_type_dao.change_tag_name(req.params.tag_name, new_tag_name)
-            .then((result) => res.status(200).end())
+            .then((result) => res.status(200).json({'message': 'Tag_name changed'}))
             .catch((err) => res.status(500).json({
                 errors: [{'param': 'Server', 'msg': err}],
             }));
