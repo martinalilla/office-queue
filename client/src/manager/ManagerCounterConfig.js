@@ -149,7 +149,6 @@ class ManagerCounterConfig extends React.Component {
                             {
                                 this.state.countersList &&
                                 this.state.countersList.map((c)=>{
-<<<<<<< HEAD
                                     return <li key={c} className={this.state.selectedCounter === c ? "list-group-item cursor-h selected" : "list-group-item cursor-h"}
                                                 onClick={()=>{
                                                                 this.getRequestTypes(c); 
@@ -157,17 +156,6 @@ class ManagerCounterConfig extends React.Component {
                                                                 }}>
                                                 <h5 className="mb-1">Counter: {c}</h5>
                                             </li>
-=======
-                                    return <>
-                                        <li key={this.state.selectedCounter} className={this.state.selectedCounter === c ? "list-group-item cursor-h selected" : "list-group-item cursor-h"}
-                                            onClick={()=>{
-                                                            this.getRequestTypes(c); 
-                                                            this.setState({selectedCounter: c, mode: 'modify'});
-                                                            }}>
-                                            <h5 className="mb-1">Counter: {c}</h5>
-                                        </li>
-                                    </>
->>>>>>> 8e653eaaa1f3ee45b64502e66156d322cd7ff26e
                                 })
                             }
                         </ul>
@@ -230,13 +218,7 @@ function ModifyCounter (props) {
             {
                 props.requestTypes &&
                 props.requestTypes.map((r)=>{
-<<<<<<< HEAD
                     return <li key={r.request_type}>{r.request_type}</li>
-=======
-                    return <>
-                        <li key={r.request_type}>{r.request_type}</li>
-                    </>
->>>>>>> 8e653eaaa1f3ee45b64502e66156d322cd7ff26e
                 })
             }
         </ul>
