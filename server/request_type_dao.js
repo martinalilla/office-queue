@@ -99,3 +99,20 @@ exports.update_request_type = function(tag_name, service_time) {
   });
 }
 
+/**
+ * Change the tag_name of an existing request_type with a given tag_name. 
+ */
+exports.change_tag_name = function(tag_name, new_tag_name) {
+  return new Promise((resolve, reject) => {
+      const sql = 'UPDATE Request_type SET tag_name = ? WHERE tag_name = ?';
+      db.run(sql, [new_tag_name, tag_name], (err) => {
+          if(err){
+              console.log(err);
+              reject(err);
+          }
+          else
+              resolve(null);
+      })
+  });
+}
+
