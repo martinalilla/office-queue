@@ -5,7 +5,6 @@
 const db = require('./db');
 
 const Ticket = require('./ticket.js');
-const Service = require('./services.js');
 
 const create_ticket = function (row) {
     return new Counter(row.id, row.request_type);
