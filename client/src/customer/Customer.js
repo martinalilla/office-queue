@@ -22,20 +22,21 @@ class Customer extends React.Component {
         api.getAllRequestTypes().then((reqTypeList)=>{
             let reqTypeArray = [];
 
+            let i=0;
             for(let reqType of reqTypeList) {
-                reqTypeArray[reqType.reqTypeId] = reqType.reqTypeName;
+                reqTypeArray[i++] = reqType.tag_name;
             }
 
             this.setState({requestTypeArray: reqTypeArray});
         })
     }
 
-    addTicket = (reqTypeId) => {
-        api.getTicket(reqTypeId).then((ticketId)=>{
+    addTicket = (reqTypeName) => {
+        api.getTicket(reqTypeName).then((ticketId)=>{
             this.setState((state)=>{
                let newTicketList = [...state.ticketList] ;
 
-               newTicketList.push({ticketNum: ticketId, reqTypeId: reqTypeId});
+               newTicketList.push({ticketNum: ticketId, reqTypeId: reqTypeName});
 
                 return {ticketList: newTicketList};
             })
@@ -80,7 +81,7 @@ class NewTicket extends React.Component{
                 {
                     this.props.requestTypeArray.map((reqTypeName, reqTypeId)=>
                         <Button key={reqTypeId} className="large_button" variant="success" size="lg" block
-                                onClick={()=>this.props.addTicket(reqTypeId)}>{reqTypeName}</Button>
+                                onClick={()=>this.props.addTicket(reqTypeName)}>{reqTypeName}</Button>
                     )
                 }
             </div>
