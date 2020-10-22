@@ -138,7 +138,7 @@ app.delete('/api/counter/:id/:request', (req,res) => {
         }));
 });
   /***********************TICKETS******************************************/
- /* 
+ 
 // GET LIST OF TICKETS 
 app.get('/api/tickets', (req, res) => {
     var tickets =  ticket_dao.listTickets(); 
@@ -161,8 +161,8 @@ app.get('/api/tickets', (req, res) => {
           });
     }
 });
-*/
 
+/*
 //CREATE A NEW TICKET 
 app.post('/api/tickets', (req,res) => {
     const ticket = req.body;
@@ -182,7 +182,7 @@ app.post('/api/tickets', (req,res) => {
         
     }
 });
-
+*/
 function toSeconds(t) {
     var bits = t.split(':');
     return bits[0]*3600 + bits[1]*60 + bits[2]*1;
@@ -198,12 +198,14 @@ next_ticket = function(id) {
     var tag = "";
     var time = 0;
     for (let index = 0; index < req_types.length; index++) {
-        let request = queues.get(req_types[index]);
-      if (request.length == max){
-          var time2 = toSeconds(request.service_time);
+        //let request = queues.get(req_types[index]);
+        let request = ticket_dao.get_tickets(req_types[index])
+       
+    if (request.length == max){
+          var time2 = toSeconds(req_types[index].service_time);
           if(time2 < time){
             max = request.length;
-            tag = request.tag_name;
+            tag = req_types[index].tag_name;
             time = time2;
             continue;
           }
@@ -212,13 +214,15 @@ next_ticket = function(id) {
         
        if (request.length > max){
            max = request.length;
-            tag = request.tag_name;
+           tag = req_types[index].tag_name;
         }
         
     }
     
    ticketss = queues.get(tag)
-   return ticketss.shift().ticket_number;
+   var a = ticketss.shift();
+
+   return a.ticket_number;
    
 }
 
@@ -232,17 +236,17 @@ app.get('/api/tickets/:id', (req, res) => {
 
   //Get tikets  by request_type
   app.get('/api/tickets/:request_type', (req, res) => {
-  //  var tickets =   ticket_dao.get_tickets(req.params.request_type); 
-    //var tickets = {ticket_number:1, request_type: "posta", wait_time: "00:20:00" }
-    var a = queues.get(req.params.tag_name)
-    res.status(201).json(a);
+    var tickets =   ticket_dao.get_tickets(req.params.request_type); 
+    var tickets = {ticket_number:1, request_type: "posta", wait_time: "00:20:00" }
+  //  var a = queues.get(req.params.tag_name)
+  //  res.status(201).json(a);
 
     
     
     
 });
 
-/*
+
 app.delete('/api/tickets/:ticket_number', (req,res) => {
     const ticket_number = req.params.ticket_number; 
     console.log("ticket_number", ticket_number); 
@@ -257,7 +261,7 @@ app.delete('/api/tickets/:ticket_number', (req,res) => {
    
         
 });
-*/
+
   /*********************************************************************** */
 
   // GET /request type
