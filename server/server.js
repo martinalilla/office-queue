@@ -46,21 +46,7 @@ app.listen(PORT, ()=>{
     console.log(`Server running on http://localhost:${PORT}/`);
 });
 
-//I DON'T KNOW HOW TO CALL THIS PIECE OF CODE AT THE START OF SERVER
-// let queues = new Map();
-// //get all request type and fill the map
-// types = request_type_dao.listRequests();
 
-// for (let index = 0; index < types.length; index++) {
-//     const element = types[index];
-//     let request = [];
-//     queues.set(element.tag_name, request);
-//     console.log(element.tag_name + 'inserted in the map');
-    
-// }
-//I DON'T KNOW HOW TO CALL THIS PIECE OF CODE AT THE START OF SERVER
-
-//I DON'T KNOW HOW TO CALL THIS PIECE OF CODE AT THE START OF SERVER
 
 //get all request type and fill the map
 types = request_type_dao.listRequests();
@@ -72,7 +58,7 @@ for (let index = 0; index < types.length; index++) {
     console.log(element.tag_name + 'inserted in the map');
     
 }
-//I DON'T KNOW HOW TO CALL THIS PIECE OF CODE AT THE START OF SERVER
+
 
 
 app.get('/', (req, res) => {
@@ -152,6 +138,7 @@ app.delete('/api/counter/:id/:request', (req,res) => {
         }));
 });
   /***********************TICKETS******************************************/
+ /* 
 // GET LIST OF TICKETS 
 app.get('/api/tickets', (req, res) => {
     var tickets =  ticket_dao.listTickets(); 
@@ -174,18 +161,87 @@ app.get('/api/tickets', (req, res) => {
           });
     }
 });
+*/
+
+//CREATE A NEW TICKET 
+app.post('/api/tickets', (req,res) => {
+    const ticket = req.body;
+    console.log(req.body) ; 
+    if(!ticket || !ticket.request_type){
+        res.status(400).end();
+    } else {
+        ticket_dao.create_ticket(ticket.request_type)
+        let request = new Ticket(ticket.ticket_number , ticket.request_type , ticket.wait_time);
+        var a = queues.get(ticket.request_type)
+        a.push(request)
+        queues.delete(ticket.request_type)
+        queues.set(ticket.request_type , a)
+        console.log(queues.get(ticket.request_type))
+        res.status(201).json({"ticket_number": ticket.ticket_number});
+     
+        
+    }
+});
+
+function toSeconds(t) {
+    var bits = t.split(':');
+    return bits[0]*3600 + bits[1]*60 + bits[2]*1;
+}
 
 
-  //Get tikets  by request_type
-  app.get('/api/tickets/:request_type', (req, res) => {
-    var tickets =   ticket_dao.get_tickets(req.params.request_type); 
-    //var tickets = {ticket_number:1, request_type: "posta", wait_time: "00:20:00" }
-        res.status(201).json(tickets);
+
+  
+
+next_ticket = function(id) {
+    let req_types = counter_dao.get_requests(id);
+    var max = 0;
+    var tag = "";
+    var time = 0;
+    for (let index = 0; index < req_types.length; index++) {
+        let request = queues.get(req_types[index]);
+      if (request.length == max){
+          var time2 = toSeconds(request.service_time);
+          if(time2 < time){
+            max = request.length;
+            tag = request.tag_name;
+            continue;
+          }
+               
+        }
+        
+       if (request.length > max){
+           max = request.length;
+            tag = request.tag_name;
+        }
+        
+    }
     
+   ticketss = queues.get(tag)
+   return ticketss.shift().ticket_number;
+   
+}
+
+//GET next_ticket from a counter
+app.get('/api/tickets/:id', (req, res) => {
+    next_ticket(req.params.id).
+    then(ticket_number =>res.json(ticket_number));
     
 });
 
 
+  //Get tikets  by request_type
+  app.get('/api/tickets/:request_type', (req, res) => {
+  //  var tickets =   ticket_dao.get_tickets(req.params.request_type); 
+    //var tickets = {ticket_number:1, request_type: "posta", wait_time: "00:20:00" }
+    var a = queues.get(req.params.tag_name)
+    res.status(201).json(a);
+
+    
+    
+    
+});
+
+/*
 app.delete('/api/tickets/:ticket_number', (req,res) => {
     const ticket_number = req.params.ticket_number; 
     console.log("ticket_number", ticket_number); 
@@ -200,7 +256,7 @@ app.delete('/api/tickets/:ticket_number', (req,res) => {
    
         
 });
-
+*/
   /*********************************************************************** */
 
   // GET /request type

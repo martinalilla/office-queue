@@ -3,14 +3,14 @@
 // DAO module for accessing tickets
 // Data Access Object
 const db = require('./db');
-
 const Ticket = require('./ticket.js');
 
 const create_ticket = function (ticket_number, request_type, wait_time) {
     return new Ticket(ticket_number, request_type, wait_time);
 }
 
-var  lastID=6;
+//var  lastID=6;
+/*
 var tickets = [{ticket_number:1, request_type: "shipping", wait_time: "00:20:00" },
                 {ticket_number:2, request_type: "shipping", wait_time: "00:10:00" },
                 {ticket_number:3, request_type: "accounts management", wait_time: "00:25:00" },
@@ -24,11 +24,12 @@ exports.listTickets = function() {
     return tickets; 
   };
   
-
+*/
 
    /**
  * Get ticket list with a specific request_type
  */
+/*
 exports.get_tickets = function(request_type) {
     var newArray= tickets.filter(function(el){
         return el.request_type==request_type; 
@@ -79,7 +80,7 @@ exports.get_tickets = function(request_type) {
 }
 
   
-  
+ */ 
 
 
   
