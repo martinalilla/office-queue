@@ -168,9 +168,9 @@ app.get('/api/tickets', (req, res) => {
     if(!ticket || !ticket.request_type){
         res.status(400).end();
     } else {
-        ticket_dao.create_ticket(ticket.request_type); 
+        let ticketId = ticket_dao.create_ticket(ticket.request_type);
         res.status(201).json({
-            message: 'ok'
+            "ticket_id": ticketId
           });
     }
 });

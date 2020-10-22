@@ -43,7 +43,8 @@ exports.get_tickets = function(request_type) {
         var t = create_ticket(lastID, request_type, "00:05:00"); 
         tickets.push(t); 
         console.log("ticket created"); 
-        console.log(tickets); 
+        console.log(tickets);
+        return t.ticket_number;
   }
 
 

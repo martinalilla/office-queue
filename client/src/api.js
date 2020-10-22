@@ -277,7 +277,7 @@ async function getTicket(requestType){
     // EXPECTED INPUT: integer that corresponds to the index of the request type
     // EXPECTED OUTPUT: integer that corresponds to the number of the ticket generated
     const response = await fetch('/api/tickets', {
-        method: 'PUT',
+        method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
@@ -285,7 +285,7 @@ async function getTicket(requestType){
     });
     const result = await response.json();
     if(response.ok){
-        return result.id;
+        return result.ticket_id;
 
     } else{
         let error = {status: response.status, msg: "Cann't fetch counters list."};
