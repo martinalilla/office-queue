@@ -241,6 +241,35 @@ async function updateTagName(tag_name, new_tag_name) {
     });
 }
 
+async function newTicket(ticket_number , request_type , wait_time) {
+
+    // POST a new ticket
+    // Request body : ticket object
+    //    object example: {ticket_number : 5 , request_typev: 'shipping' , wait_time : 15}
+    // Response body: object : {ticket_number : 5}
+    const ticket = {
+                    ticket_number : ticket_number , 
+                    request_type: request_type , 
+                    wait_time : wait_time
+                };
+    return new Promise((resolve, reject) => {
+        fetch('/api/tickets', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(ticket),
+        }).then((response) => {
+            if (response.ok) {
+                    resolve(response.json());
+
+            } else {
+                reject({status: response.status, msg: "Database error..."})
+            }
+        }).catch((err) => { reject({status: err.status, msg: "Server error..."}) }); // connection errors
+    });
+}
+
 
 // TEMPORARY function 
 async function getTicket(requestType){
@@ -266,4 +295,4 @@ async function getTicket(requestType){
 
 export default{getAllRequestTypes, getAllCountersList, getRequestTypes, getCountersByRequestType, newCounter,
                 deleteCounter, deleteRequestTypeFromCounter, getServiceTime, newRequestType, deleteRequestType,
-                updateServiceTime, updateTagName, getTicket};
+                updateServiceTime, updateTagName, newTicket, getTicket};

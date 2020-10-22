@@ -59,7 +59,7 @@ exports.get_tickets = function(request_type) {
     //INSERT A TICKET 
     exports.create_ticket = function(request_type) {
       return new Promise((resolve, reject) => {
-          const sql = 'INSERT INTO Tickets(request_type, wait_time ) VALUES(?,?)';
+          const sql = 'INSERT INTO Tickets(request_type, service_time ) VALUES(?,?)';
           db.run(sql, [request_type, "00:20:00"], function (err) {
               if(err){
                   console.log(err);

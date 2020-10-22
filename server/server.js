@@ -4,6 +4,7 @@ const bodyParser = require("body-parser");
 const counter_dao = require('./counter_dao.js');
 const ticket_dao = require('./ticket_dao.js');
 const request_type_dao = require('./request_type_dao.js')
+const Ticket = require('./ticket.js');
 
 
 
@@ -20,7 +21,44 @@ app.use(morgan('tiny'));
 app.use(express.json());
 app.use(express.static('client'));
 
-app.listen(PORT, ()=>console.log(`Server running on http://localhost:${PORT}/`));
+///////////////////////////////////
+let queues = new Map();
+
+function initializeQueue(){
+    
+    //get all request type and fill the map
+    types = request_type_dao.listRequests();
+
+    for (let index = 0; index < types.length; index++) {
+        const element = types[index];
+        let request = [];
+        queues.set(element.tag_name, request);
+        console.log(element.tag_name + 'inserted in the map');
+        
+    }
+    console.log('works');
+    ///////////////////////////////////
+}
+
+
+app.listen(PORT, ()=>{
+    initializeQueue();
+    console.log(`Server running on http://localhost:${PORT}/`);
+});
+
+//I DON'T KNOW HOW TO CALL THIS PIECE OF CODE AT THE START OF SERVER
+// let queues = new Map();
+// //get all request type and fill the map
+// types = request_type_dao.listRequests();
+
+// for (let index = 0; index < types.length; index++) {
+//     const element = types[index];
+//     let request = [];
+//     queues.set(element.tag_name, request);
+//     console.log(element.tag_name + 'inserted in the map');
+    
+// }
+//I DON'T KNOW HOW TO CALL THIS PIECE OF CODE AT THE START OF SERVER
 
 
 app.get('/', (req, res) => {
@@ -102,7 +140,7 @@ app.delete('/api/counter/:id/:request', (req,res) => {
 
   /***********************TICKETS******************************************/
 // GET LIST OF TICKETS 
-  app.get('/api/tickets', (req, res) => {
+app.get('/api/tickets', (req, res) => {
     ticket_dao.listTickets()
       .then((tickets) => res.json(tickets) )
       .catch((err) => {
@@ -114,23 +152,35 @@ app.delete('/api/counter/:id/:request', (req,res) => {
   });
 
 //CREATE A NEW TICKET 
-  app.post('/api/tickets', (req,res) => {
+app.post('/api/tickets', (req,res) => {
     const ticket = req.body;
     console.log(req.body) ; 
     if(!ticket || !ticket.request_type){
         res.status(400).end();
     } else {
-        ticket_dao.create_ticket(ticket.request_type)
+        let request = new Ticket(ticket.ticket_number , ticket.request_type , ticket.wait_time);
+        var a = queues.get(ticket.request_type)
+        ///////////////////////////
+        if(!a) a = []; // modified
+        ////////////////////////////
+        a.push(request)
+        queues.delete(ticket.request_type)
+        queues.set(ticket.request_type , a)
+        console.log(queues.get(ticket.request_type))
+        res.status(201).json({"ticket_number": ticket.ticket_number});
+       /* ticket_dao.create_ticket(ticket.request_type)
             .then((id) => res.status(201).json({"id" : id}))
             .catch((err) => {
                 res.status(500).json({errors: [{'param': 'Server', 'msg': err}],})
             });
+       */ 
+        
     }
 });
 
 
   //Get tikets  by request_type
-  app.get('/api/tickets/:request_type', (req, res) => {
+app.get('/api/tickets/:request_type', (req, res) => {
     ticket_dao.get_tickets(req.params.request_type)
         .then((tickets) => {
             if(!tickets){
@@ -144,6 +194,35 @@ app.delete('/api/counter/:id/:request', (req,res) => {
                 errors: [{'param': 'Server', 'msg': err}],
             });
         });
+});
+
+next_ticket = function(id) {
+    let req_types = counter_dao.get_requests(id);
+    var max = 0;
+    var tag = "";
+   // var time = "10:00:00";
+    for (let index = 0; index < req_types.length; index++) {
+        let request = queues.get(req_types[index]);
+      /*  if (request.length == max){
+            if(request.service_time < time){  }
+             //manca il confronto tra service time   
+        }*/
+        if (request.length > max){
+            max = request.length;
+            tag = request.tag_name;
+        }
+        
+    }
+    
+   ticketss = queues.get(tag);
+   return ticketss.shift().ticket_number;
+   
+}
+
+//GET next_ticket from a counter
+app.get('/api/tickets/:id', (req, res) => {
+    next_ticket(req.params.id).
+    then(ticket_number =>res.json(ticket_number))
 });
 
   /*********************************************************************** */
@@ -179,6 +258,7 @@ app.get('/api/request_type/:tag_name', (req, res) => {
   //create a new request_type
 app.post('/api/request_type', (req,res) => {
     const request_type = req.body;
+
     if(!request_type || !request_type.tag_name || !request_type.service_time){
         res.status(400).end();
     } else {
@@ -187,6 +267,8 @@ app.post('/api/request_type', (req,res) => {
             .catch((err) => {
                 res.status(500).json({errors: [{'param': 'Server', 'msg': err}],})
             });
+        let request = []
+        queues.set(request_type.tag_name, request )
     }
 });
 

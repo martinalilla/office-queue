@@ -116,6 +116,8 @@ exports.get_counters = function(request_type) {
         })
     });
   }
+
+  
   
   
  
