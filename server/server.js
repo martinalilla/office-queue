@@ -61,7 +61,7 @@ app.listen(PORT, ()=>{
 //I DON'T KNOW HOW TO CALL THIS PIECE OF CODE AT THE START OF SERVER
 
 //I DON'T KNOW HOW TO CALL THIS PIECE OF CODE AT THE START OF SERVER
-let queues = new Map();
+
 //get all request type and fill the map
 types = request_type_dao.listRequests();
 
@@ -151,107 +151,58 @@ app.delete('/api/counter/:id/:request', (req,res) => {
             errors: [{'param': 'Server', 'msg': err}],
         }));
 });
-
   /***********************TICKETS******************************************/
 // GET LIST OF TICKETS 
 app.get('/api/tickets', (req, res) => {
-    ticket_dao.listTickets()
-      .then((tickets) => res.json(tickets) )
-      .catch((err) => {
-        res.status(500).json({
-            errors: [{'param': 'Server', 'msg': err}],
-        });
-    });
+    var tickets =  ticket_dao.listTickets(); 
+    //var tickets = {ticket_number:1, request_type: "posta", wait_time: "00:20:00" }
+        res.status(201).json(tickets);
+    
       
   });
 
 //CREATE A NEW TICKET 
-app.post('/api/tickets', (req,res) => {
+  app.post('/api/tickets', (req,res) => {
     const ticket = req.body;
     console.log(req.body) ; 
     if(!ticket || !ticket.request_type){
         res.status(400).end();
     } else {
-        let request = new Ticket(ticket.ticket_number , ticket.request_type , ticket.wait_time);
-        var a = queues.get(ticket.request_type)
-<<<<<<< HEAD
-        ///////////////////////////
-        if(!a) a = []; // modified
-        ////////////////////////////
-=======
->>>>>>> 247501ad5b085ed77846cb9d4a10385f685fb2b0
-        a.push(request)
-        queues.delete(ticket.request_type)
-        queues.set(ticket.request_type , a)
-        console.log(queues.get(ticket.request_type))
-        res.status(201).json({"ticket_number": ticket.ticket_number});
-       /* ticket_dao.create_ticket(ticket.request_type)
-            .then((id) => res.status(201).json({"id" : id}))
-            .catch((err) => {
-                res.status(500).json({errors: [{'param': 'Server', 'msg': err}],})
-            });
-       */ 
-        
+        ticket_dao.create_ticket(ticket.request_type); 
+        res.status(201).json({
+            message: 'ok'
+          });
     }
 });
 
 
   //Get tikets  by request_type
-app.get('/api/tickets/:request_type', (req, res) => {
-    ticket_dao.get_tickets(req.params.request_type)
-        .then((tickets) => {
-            if(!tickets){
-                res.status(404).send();
-            } else {
-                res.json(tickets);
-            }
-        })
-        .catch((err) => {
-            res.status(500).json({
-                errors: [{'param': 'Server', 'msg': err}],
-            });
-        });
+  app.get('/api/tickets/:request_type', (req, res) => {
+    var tickets =   ticket_dao.get_tickets(req.params.request_type); 
+    //var tickets = {ticket_number:1, request_type: "posta", wait_time: "00:20:00" }
+        res.status(201).json(tickets);
+    
+    
 });
 
-next_ticket = function(id) {
-    let req_types = counter_dao.get_requests(id);
-    var max = 0;
-    var tag = "";
-   // var time = "10:00:00";
-    for (let index = 0; index < req_types.length; index++) {
-        let request = queues.get(req_types[index]);
-      /*  if (request.length == max){
-            if(request.service_time < time){  }
-             //manca il confronto tra service time   
-        }*/
-        if (request.length > max){
-            max = request.length;
-            tag = request.tag_name;
-        }
-        
-    }
-    
-<<<<<<< HEAD
-   ticketss = queues.get(tag);
-=======
-   ticketss = queues.get(tag)
->>>>>>> 247501ad5b085ed77846cb9d4a10385f685fb2b0
-   return ticketss.shift().ticket_number;
-   
-}
 
-//GET next_ticket from a counter
-app.get('/api/tickets/:id', (req, res) => {
-    next_ticket(req.params.id).
-<<<<<<< HEAD
-    then(ticket_number =>res.json(ticket_number))
-=======
-    then(ticket_number =>res.json(ticket_number));
-    
->>>>>>> 247501ad5b085ed77846cb9d4a10385f685fb2b0
+app.delete('/api/tickets/:ticket_number', (req,res) => {
+    const ticket_number = req.params.ticket_number; 
+    console.log("ticket_number", ticket_number); 
+    if(!ticket_number ){
+        res.status(400).end();
+    } else {
+        ticket_dao.remove_ticket(ticket_number); 
+        res.status(201).json({
+            message: 'deleted'
+          });
+    }
+   
+        
 });
 
   /*********************************************************************** */
+
   // GET /request type
 // Request body: empty
 // Response body: Array of objects, each describing a Request_type
