@@ -20,7 +20,7 @@ describe('request_type_testing', ()=>{
               .end((err, res) => {
                     res.should.have.status(200);
                     res.body.should.be.a('array');
-                    res.body.length.should.be.eql(6);
+                    res.body.length.should.be.eql(5);
                 done();
               });
         });
@@ -84,7 +84,7 @@ describe('request_type_testing', ()=>{
         .end((err, res) => {
               res.should.have.status(201);
               res.body.should.be.a('object');
-              res.body.should.have.property('id').eql(8);
+              res.body.should.have.property('id').eql(7);
           done();
         });
   });

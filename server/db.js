@@ -3,7 +3,7 @@
 const sqlite = require('sqlite3').verbose();
 
 
-if(process.env.NODE_ENV == 'test'){
+if(process.env.NODE_ENV.localeCompare('test')){
   
     var DBSOURCE = "./test/office-queue-test.db";
     
