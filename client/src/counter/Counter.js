@@ -8,6 +8,7 @@ class Counter extends React.Component {
         this.state = {
             countersList: undefined,
             selectedCounter: undefined,
+            currentTicket: undefined
         }
     }
 
@@ -24,7 +25,7 @@ class Counter extends React.Component {
                 const c = arr.find((a)=>{return (counter.id === a)})
                 if(!c) arr.push(counter.id);
             });
-            this.setState({countersList: arr.sort()});
+            this.setState({countersList: arr.sort(), selectedCounter: arr.sort()[0]});
 
         }).catch((err) => {
             console.log('Database error', err);
@@ -53,8 +54,14 @@ class Counter extends React.Component {
                     </Col>
                     <Col xs={8}>
                         <h2><i>Counter: {this.state.selectedCounter}</i></h2>
-                        <h3>Ticket in process:</h3>
-                        <h2>No:</h2>
+                        {
+                            this.state.currentTicket ? <>
+                                            <h3>Ticket in process:</h3>
+                                            <h2>No:</h2> 
+                            </>
+                            : <h4>There is not ticket in process...</h4>
+                        }
+                        
                        <Button variant="success" size="lg">Next Customer</Button>
                     </Col>
                 </Row>
