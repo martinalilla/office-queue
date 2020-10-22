@@ -204,6 +204,7 @@ next_ticket = function(id) {
           if(time2 < time){
             max = request.length;
             tag = request.tag_name;
+            time = time2;
             continue;
           }
                
