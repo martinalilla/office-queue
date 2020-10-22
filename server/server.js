@@ -192,9 +192,9 @@ app.delete('/api/tickets/:ticket_number', (req,res) => {
     if(!ticket_number ){
         res.status(400).end();
     } else {
-        ticket_dao.remove_ticket(ticket_number); 
+        var m= ticket_dao.remove_ticket(ticket_number); 
         res.status(201).json({
-            message: 'deleted'
+            message: m
           });
     }
    

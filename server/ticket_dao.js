@@ -50,9 +50,16 @@ exports.get_tickets = function(request_type) {
 
     //INSERT A TICKET 
     exports.remove_ticket = function(ticket_number) {
+      
        var index= findWithAttr(tickets, 'ticket_number', ticket_number);
        console.log(index); 
        tickets.splice(index, 1);
+      
+       if(index==-1 ){
+           return "tiket not found"; 
+       }else{
+           return "ticket deleted"; 
+       }
         // var t= tickets.filter(function(el){
         //     return el.ticket_number==ticket_number; 
         // });
@@ -64,7 +71,7 @@ exports.get_tickets = function(request_type) {
 
   function findWithAttr(array, attr, value) {
     for(var i = 0; i < array.length; i += 1) {
-        if(array[i][attr] === value) {
+        if(array[i][attr] == value) {
             return i;
         }
     }
