@@ -60,6 +60,20 @@ app.listen(PORT, ()=>{
 // }
 //I DON'T KNOW HOW TO CALL THIS PIECE OF CODE AT THE START OF SERVER
 
+//I DON'T KNOW HOW TO CALL THIS PIECE OF CODE AT THE START OF SERVER
+let queues = new Map();
+//get all request type and fill the map
+types = request_type_dao.listRequests();
+
+for (let index = 0; index < types.length; index++) {
+    const element = types[index];
+    let request = [];
+    queues.set(element.tag_name, request);
+    console.log(element.tag_name + 'inserted in the map');
+    
+}
+//I DON'T KNOW HOW TO CALL THIS PIECE OF CODE AT THE START OF SERVER
+
 
 app.get('/', (req, res) => {
     res.json({
@@ -160,9 +174,12 @@ app.post('/api/tickets', (req,res) => {
     } else {
         let request = new Ticket(ticket.ticket_number , ticket.request_type , ticket.wait_time);
         var a = queues.get(ticket.request_type)
+<<<<<<< HEAD
         ///////////////////////////
         if(!a) a = []; // modified
         ////////////////////////////
+=======
+>>>>>>> 247501ad5b085ed77846cb9d4a10385f685fb2b0
         a.push(request)
         queues.delete(ticket.request_type)
         queues.set(ticket.request_type , a)
@@ -214,7 +231,11 @@ next_ticket = function(id) {
         
     }
     
+<<<<<<< HEAD
    ticketss = queues.get(tag);
+=======
+   ticketss = queues.get(tag)
+>>>>>>> 247501ad5b085ed77846cb9d4a10385f685fb2b0
    return ticketss.shift().ticket_number;
    
 }
@@ -222,7 +243,12 @@ next_ticket = function(id) {
 //GET next_ticket from a counter
 app.get('/api/tickets/:id', (req, res) => {
     next_ticket(req.params.id).
+<<<<<<< HEAD
     then(ticket_number =>res.json(ticket_number))
+=======
+    then(ticket_number =>res.json(ticket_number));
+    
+>>>>>>> 247501ad5b085ed77846cb9d4a10385f685fb2b0
 });
 
   /*********************************************************************** */
