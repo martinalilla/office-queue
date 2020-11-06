@@ -1,0 +1,22 @@
+<testExecutions version="1">
+<file path="test\counter.test.js">
+<testCase name="/counters: it should GET all the counters" duration="26"/>
+<testCase name="/GET/api/counter/:id: it should GET all the request types of the counter with id=5" duration="6"/>
+<testCase name="/GET/api/counters/request/:tag: it should GET all conters that serve the request type with tag_name=withdrawals" duration="6"/>
+<testCase name="/POST counter: it should not POST a counter without the id" duration="38"/>
+<testCase name="/POST counter: it should  POST a counter with id=9" duration="9"/>
+<testCase name="/DELETE/counter/:id: it should DELETE counters with id =7 " duration="3"/>
+<testCase name="/DELETE/counter/:id/:request: it should DELETE counters with id =7 " duration="8"/>
+</file>
+<file path="test\request_type.test.js">
+<testCase name="/request_type: it should GET all the request_types" duration="7"/>
+<testCase name="/GET/api/request_type/:tag_name: it should GET the service_time=&quot;00:10:00&quot; by the given tag_name=&quot;shipping&quot;" duration="3"/>
+<testCase name="/POST request_type: it should not POST a request_type without service_time" duration="3"/>
+<testCase name="/POST request_type: it should  POST a request_type with tag_name=&quot;testing&quot;" duration="7"/>
+<testCase name="/DELETE/request_type/:tag_name: it should DELETE a request_type with tag name &quot;testing&quot; " duration="6"/>
+<testCase name="/PUT/request_type/:tag_name: it should UPDATE the service time given the tag name" duration="11"/>
+<testCase name="/PUT/request_type/:tag_name: it should UPDATE the service time given the tag name" duration="8"/>
+<testCase name="/PUT/request_type/change/:tag_name: it should CHANGE the tag_name of a given request_type" duration="6"/>
+<testCase name="/PUT/request_type/change/:tag_name: it should CHANGE the tag_name of a given request_type" duration="15"/>
+</file>
+</testExecutions>
